@@ -18,10 +18,27 @@ server.get('/', async (req, res) => {
     }
   });
 
+  server.get('/:id', async (req, res) => {
+    try {
+        console.log("get by id request")
+        const budgetId = await db.findById(req.params.id);
+        if (budgetId) {
+            res.status(200).json(budgetId);
+          } else {
+            res.status(404).json({ message: 'User not found' });
+          }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Error retrieving posts by id'
+        })
+    }
+});
+
   server.post('/', async (req, res) => {
     try {
-        const projects = await db.add(req.body);
-        res.status(201).json(projects);
+        const createBudget = await db.add(req.body);
+        res.status(201).json(createBudget);
       } catch (error) {
         // log error to database
         console.log(error);
@@ -48,15 +65,15 @@ server.delete('/:id', async (req, res) => {
 
 server.put('/:id', async (req, res) => {
   try {
-      const project = await db.update(req.params.id, req.body);
-      if (project) {
-            res.status(200).json(project);
+      const updateBudget = await db.update(req.params.id, req.body);
+      if (updateBudget) {
+            res.status(200).json(updateBudget);
       } else {
-            res.status(404).json({ message: 'That project could not be found' });
+            res.status(404).json({ message: 'That budget could not be found' });
       }
   } catch (err) {
       console.log(err);
-      res.status(500).json({ message: 'Error updating the project' });
+      res.status(500).json({ message: 'Error updating the budget' });
 }
 });
 
