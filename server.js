@@ -31,6 +31,35 @@ server.get('/', async (req, res) => {
       }
 });
 
+server.delete('/:id', async (req, res) => {
+  try {
+      const id = await db.remove(req.params.id);
+      res.status(200).json({
+          url: `/projects/${req.params.id}`,
+          operation: `DELETE for project with id ${req.params.id}`
+      });
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({
+          message: 'Error, cannot delete'
+      })
+  }
+});
+
+server.put('/:id', async (req, res) => {
+  try {
+      const project = await db.update(req.params.id, req.body);
+      if (project) {
+            res.status(200).json(project);
+      } else {
+            res.status(404).json({ message: 'That project could not be found' });
+      }
+  } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Error updating the project' });
+}
+});
+
   // server.get('/', (req, res) => {
   //   res.send(`<h2>Let's write some middleware!</h2>`)
   // });
