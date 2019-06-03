@@ -59,3 +59,6 @@ group by city
 order by COUNT(*);
 
 ## delete all users that have no orders. Should delete 17 (or 18 if you haven't deleted the record added) records.
+
+DELETE from Customers 
+WHERE Customers.CustomerID not in (select Orders.CustomerID from orders)
